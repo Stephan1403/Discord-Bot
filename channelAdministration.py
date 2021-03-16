@@ -82,7 +82,6 @@ async def voice_channel_info(message):
     await message.channel.send(embed=embed)
 
 
-    
 #2 name
 async def edit_name(message, channel):
 
@@ -98,3 +97,19 @@ async def edit_name(message, channel):
             if a.channel == channel:
                 a.name = name
                 await channel.edit(name = name)
+
+
+#3 userlimit
+async def edit_user_limit(message, channel):
+    userLimit = message.content.split("=")[1]
+    
+    #TODO: acept user limit none... 
+
+    if isInt(userLimit):
+        if int(userLimit) > 0 and int(userLimit) < 100: 
+            await channel.edit(user_limit = int(userLimit))
+        else: 
+            await message.channel.send("Your User Limit has to be between 1 and 99")
+            
+    else:
+        await message.channel.send("Please enter a valid number")
