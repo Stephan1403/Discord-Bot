@@ -5,19 +5,19 @@ publicVoiceChannels = []
 
 
 #create Voice Channel
-async def create_voice_channel(member, name, category_name):
-    channel = await member.guild.create_voice_channel(name, category_name = category_name)
+async def create_voice_channel(member, name, category):
+    channel = await member.guild.create_voice_channel(name, category)
     return channel
 
 async def delete_voice_channel(channelList):
+    print(channelList)
     for i, e in enumerate(channelList):
         if not e.channel.members:   #voice channel is empty
             del publicVoiceChannels[i]
             await e.channel.delete()
+    print(channelList)
 
 
-#user joined a voice channel
-    #depending wich he joined call function
 async def admin_channels(member, after):
 
     #create voice channels  
@@ -41,9 +41,9 @@ async def admin_channels(member, after):
 async def public_channel(member):
 
     name =  f"Talk {random.randint(1, 100)}"     #TODO: give numbers in order
-    category_name = "GENERAL"
+    category = get_category_by_name(member.guild, "General")
 
-    channel = await create_voice_channel(member, name, category_name)
+    channel = await create_voice_channel(member, name, category)
     await member.move_to(channel)
 
     publicVoiceChannels.append(voiceChannel(name, member, channel))
