@@ -40,8 +40,8 @@ async def admin_channels(member, after):
 #public voice channel
 async def public_channel(member):
 
-    name =  f"Talk {random.randint(1, 100)}"     #TODO: give numbers in order
-    category = get_category_by_name(member.guild, "General")
+    name =  f"Talk by {member.name}"     #TODO: give numbers in order
+    category = get_category_by_name(member.guild, "Public")
 
     channel = await create_voice_channel(member, name, category)
     await member.move_to(channel)
@@ -53,7 +53,7 @@ async def public_channel(member):
 async def private_channel(member):
 
     name = f"Private Talk {random.randint(1, 100)}"
-    category = get_category_by_name(member.guild, "General")
+    category = get_category_by_name(member.guild, "Private")
 
     channel = await create_voice_channel(member, name, category)
     await member.move_to(channel)
