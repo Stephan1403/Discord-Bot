@@ -1,7 +1,9 @@
-from voiceChannel import voiceChannel
-from methods import get_category_by_name
 from discord import Embed, Colour
 import random
+
+
+from voiceChannel import voiceChannel
+from methods import get_category_by_name, isInt
 
 publicVoiceChannels = []
 privateVoiceChannels = []
@@ -62,7 +64,38 @@ async def private_channel(member):
     privateVoiceChannels.append(voiceChannel(name, member, channel))
 
 
-#edit private voice channels
+
+
+# ------Edit voice_channel commands------
+
+
+def editable_Channel(member):
+    channel = None
+    for i in privateVoiceChannels:
+        if i.user == member and member.voice.channel is not None:
+            if i.channel == member.voice.channel:
+                channel = i.channel
+    return channel
+
+
+async def voice_channel_commands(message, member):
+    if message.content.startswith(".info"):
+        await voice_channel_info(message)
+
+    if editable_Channel(member) is not None:       #user is in channel, allowance to edit
+        channel = editable_Channel(member)
+
+        command = message.content.lower().replace(" ", "")
+        if command.startswith("."):
+            if command.startswith(".name="):
+                await edit_name(message, channel)
+            if command.startswith(".userlimit="):
+                await edit_user_limit(message, channel)
+            if command.startswith(".close"):
+                pass
+            if command.startswith(".open"):
+                pass 
+
 
 
 #1 info - Embed
