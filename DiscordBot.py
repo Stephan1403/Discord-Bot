@@ -22,7 +22,6 @@ class MyClient(discord.Client):
     #on voice update
     async def on_voice_state_update(self, member, before, after):
         await admin_channels(member, after)
-    
 
 
 client = MyClient()
