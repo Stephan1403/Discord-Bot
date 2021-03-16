@@ -5,3 +5,13 @@ def get_category_by_name(guild, categoryName):
             category = c
             break
     return category
+
+
+
+    #test varibales
+def isInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
