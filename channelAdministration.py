@@ -1,5 +1,6 @@
 from voiceChannel import voiceChannel
 from methods import get_category_by_name
+from discord import Embed, Colour
 import random
 
 publicVoiceChannels = []
@@ -59,3 +60,23 @@ async def private_channel(member):
     await member.move_to(channel)
 
     privateVoiceChannels.append(voiceChannel(name, member, channel))
+
+
+#edit private voice channels
+
+
+#1 info - Embed
+async def voice_channel_info(message):
+    embed = Embed(
+        title="Voice channel commands", 
+        colour = Colour.orange(),
+        discription = 'The following commands are only available for private voice channels')
+
+    embed.set_author(name="Discord Bot")
+    embed.add_field(name="Voice channel info", value="```\n.info\n```", inline=False)
+    embed.add_field(name='Name of voice channel', value = "```\n.name = \n```", inline=False)
+    embed.add_field(name='Userlimit for voice channel', value = "```\n.userlimit = \n```")
+    embed.add_field(name='Hide voice channel', value = "```\n.close\n```", inline=False)
+    embed.add_field(name='Show voice channel', value = "```\n.open\n```", inline=False)
+
+    await message.channel.send(embed=embed)
