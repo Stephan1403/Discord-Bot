@@ -1,21 +1,21 @@
 from voiceChannel import voiceChannel
+from methods import get_category_by_name
 import random
 
 publicVoiceChannels = []
+privateVoiceChannels = []
 
 
 #create Voice Channel
 async def create_voice_channel(member, name, category):
-    channel = await member.guild.create_voice_channel(name, category)
+    channel = await member.guild.create_voice_channel(name, category=category)
     return channel
 
 async def delete_voice_channel(channelList):
-    print(channelList)
     for i, e in enumerate(channelList):
         if not e.channel.members:   #voice channel is empty
             del publicVoiceChannels[i]
             await e.channel.delete()
-    print(channelList)
 
 
 async def admin_channels(member, after):
@@ -48,4 +48,14 @@ async def public_channel(member):
 
     publicVoiceChannels.append(voiceChannel(name, member, channel))
 
-    
+
+#private voice channel
+async def private_channel(member):
+
+    name = f"Private Talk {random.randint(1, 100)}"
+    category = get_category_by_name(member.guild, "General")
+
+    channel = await create_voice_channel(member, name, category)
+    await member.move_to(channel)
+
+    privateVoiceChannels.append(voiceChannel(name, member, channel))
