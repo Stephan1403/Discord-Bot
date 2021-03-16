@@ -1,3 +1,4 @@
+from channelAdministration import admin_channels
 import discord
 
 
@@ -17,6 +18,11 @@ class MyClient(discord.Client):
     #on log in
     async def on_ready(self):
         print("looged in")
+
+    #on voice update
+    async def on_voice_state_update(self, member, before, after):
+        await admin_channels(member, after)
+    
 
 
 client = MyClient()
