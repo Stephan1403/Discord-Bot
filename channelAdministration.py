@@ -80,3 +80,21 @@ async def voice_channel_info(message):
     embed.add_field(name='Show voice channel', value = "```\n.open\n```", inline=False)
 
     await message.channel.send(embed=embed)
+
+
+    
+#2 name
+async def edit_name(message, channel):
+
+    name = message.content.split("=")[1]
+
+    for i in privateVoiceChannels:
+        if i.name == name: 
+            await message.channel.send("Name is already used, please pick another one")
+            break
+    else: 
+        #break wasn´t called -> no channel with same name
+        for a in privateVoiceChannels: 
+            if a.channel == channel:
+                a.name = name
+                await channel.edit(name = name)
