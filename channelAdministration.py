@@ -15,6 +15,17 @@ async def delete_voice_channel():
 
 #user joined a voice channel
     #depending wich he joined call function
+async def admin_channels(member, after):
+
+    if after.channel is not None:
+
+        if after.channel == "New Talk":
+            public_channel(member)
+    
+        if after.channel == "New private Talk":
+            pass
+
+
 
 #public voice channel
 async def public_channel(member):
