@@ -24,7 +24,15 @@ def get_vChannel_by_tChannel(tChannel, listA):
             if listA[i].channel:
                 return listA[i].channel
     
-            
+#text channel by voice channel
+def get_tChannel_by_vChannel(vChannel, listA):
+    
+    for i, e in enumerate(listA):
+        if e.channel == vChannel:
+            if listA[i].textChannel:
+                return listA[i].textChannel
+
+
 
 
 #test varibales
