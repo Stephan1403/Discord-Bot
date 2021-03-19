@@ -20,6 +20,7 @@ async def delete_voice_channel(channelList):
         if not e.channel.members:   #voice channel is empty
             del channelList[i]
             await e.channel.delete()
+            await e.textChannel.delete()
 
 #create Text channel
 async def create_text_channel(member, name, category):
@@ -62,13 +63,20 @@ async def public_channel(member):
 #private voice channel
 async def private_channel(member):
 
-    name = f"Private Talk {random.randint(1, 100)}"
+    channelNumber = random.randint(1, 100)
+    name = f"Private Talk {channelNumber}"
     category = get_category_by_name(member.guild, "Private")
 
+    #voice channel
     channel = await create_voice_channel(member, name, category)
     await member.move_to(channel)
 
-    privateVoiceChannels.append(voiceChannel(name, member, channel))
+    #text channel
+    t_name = f"Voice Channel Info {channelNumber}"
+    t_channel = await create_text_channel(member, t_name, category)
+    
+
+    privateVoiceChannels.append(voiceChannel(name, member, channel, t_channel))
 
 
 
