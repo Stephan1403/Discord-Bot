@@ -3,7 +3,7 @@ import random
 
 
 from voiceChannel import voiceChannel
-from methods import get_category_by_name, get_vChannel_by_tChannel, isInt
+from methods import get_category_by_name, get_tChannel_by_vChannel, get_vChannel_by_tChannel, isInt
 
 publicVoiceChannels = []
 privateVoiceChannels = []
@@ -29,7 +29,7 @@ async def create_text_channel(member, name, category):
 
 
 
-async def admin_channels(member, after):
+async def admin_channels(member, before, after):
 
     #create voice channels  
     if after.channel is not None:
@@ -43,6 +43,9 @@ async def admin_channels(member, after):
     #delete voice channels
     await delete_voice_channel(publicVoiceChannels)
     await delete_voice_channel(privateVoiceChannels)
+
+    #update text channel permission
+    update_text_channel_permisions(after, before)
 
 
 
@@ -74,16 +77,15 @@ async def private_channel(member):
     #text channel
     t_name = f"Channel {channelNumber} Administration"
     t_channel = await create_text_channel(member, t_name, category)
+
     
-
     privateVoiceChannels.append(voiceChannel(name, member, channel, t_channel))
-
 
 
 
 # ------Edit voice_channel commands------
 
-async def control_voice_channel(message, member):
+async def control_voice_channel(message, member):   #change visibility for textchannel
     if get_vChannel_by_tChannel(message.channel, privateVoiceChannels):     #TODO: somehow later iterate through all lists
 
         voice_channel = get_vChannel_by_tChannel(message.channel, privateVoiceChannels)
@@ -95,12 +97,6 @@ async def control_voice_channel(message, member):
                 await edit_name(message, voice_channel)
             if command.startswith(".userlimit="):
                 await edit_user_limit(message, voice_channel)
-        
-
-
-
-
-
 
 
 #1 info - Embed
@@ -152,3 +148,33 @@ async def edit_user_limit(message, channel):
             
     else:
         await message.channel.send("Please enter a valid number")
+
+
+
+# ------Edit text_channel commands------
+
+async def update_text_channel_permisions(after, before):
+    if before.channel:
+        channel = before.channel
+    elif after.channel:
+        channel = after.channel
+    else:
+        return
+        
+    #channel.members - members with acess
+
+    #textchannel from voice channel
+    tChannel = get_tChannel_by_vChannel(channel, privateVoiceChannels)
+    print(tChannel.name)
+
+
+
+
+    #disable permission
+
+
+
+
+
+
+#await t_channel.set_permissions(member, view_channel=True)
