@@ -3,7 +3,7 @@ import random
 
 
 from voiceChannel import voiceChannel
-from methods import get_category_by_name, isInt
+from methods import get_category_by_name, get_vChannel_by_tChannel, isInt
 
 publicVoiceChannels = []
 privateVoiceChannels = []
@@ -72,7 +72,7 @@ async def private_channel(member):
     await member.move_to(channel)
 
     #text channel
-    t_name = f"Voice Channel Info {channelNumber}"
+    t_name = f"Channel {channelNumber} Administration"
     t_channel = await create_text_channel(member, t_name, category)
     
 
@@ -83,33 +83,23 @@ async def private_channel(member):
 
 # ------Edit voice_channel commands------
 
+async def control_voice_channel(message, member):
+    if get_vChannel_by_tChannel(message.channel, privateVoiceChannels):     #TODO: somehow later iterate through all lists
 
-def editable_Channel(member):
-    channel = None
-    for i in privateVoiceChannels:
-        if i.user == member and member.voice.channel is not None:
-            if i.channel == member.voice.channel:
-                channel = i.channel
-    return channel
-
-
-async def voice_channel_commands(message, member):
-    if message.content.startswith(".info"):
-        await voice_channel_info(message)
-
-    if editable_Channel(member):       #user is in channel, allowance to edit
-        channel = editable_Channel(member)
-
+        voice_channel = get_vChannel_by_tChannel(message.channel, privateVoiceChannels)
         command = message.content.lower().replace(" ", "")
+
         if command.startswith("."):
+
             if command.startswith(".name="):
-                await edit_name(message, channel)
+                await edit_name(message, voice_channel)
             if command.startswith(".userlimit="):
-                await edit_user_limit(message, channel)
-            if command.startswith(".close"):
-                pass
-            if command.startswith(".open"):
-                pass 
+                await edit_user_limit(message, voice_channel)
+        
+
+
+
+
 
 
 
@@ -145,6 +135,7 @@ async def edit_name(message, channel):
             if a.channel == channel:
                 a.name = name
                 await channel.edit(name = name)
+                await message.channel.edit(name = f"{name} Administration")
 
 
 #3 userlimit
