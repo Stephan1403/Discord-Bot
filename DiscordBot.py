@@ -1,6 +1,6 @@
 from discord.flags import MemberCacheFlags
 from methods import get_member_by_user
-from channelAdministration import admin_channels, voice_channel_commands
+from channelAdministration import admin_channels, control_voice_channel
 import discord
 
 
@@ -27,8 +27,8 @@ class MyClient(discord.Client):
         #get member
         member = get_member_by_user(client.guilds[0], message.author)
 
-        #call voice_channel_commands
-        await voice_channel_commands(message, member)
+        #call control voice channel
+        await control_voice_channel(message, member)
 
 
     #on voice update
