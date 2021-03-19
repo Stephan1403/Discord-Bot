@@ -14,11 +14,18 @@ async def create_voice_channel(member, name, category):
     channel = await member.guild.create_voice_channel(name, category=category)
     return channel
 
+#delete Voice Channel
 async def delete_voice_channel(channelList):
     for i, e in enumerate(channelList):
         if not e.channel.members:   #voice channel is empty
-            del publicVoiceChannels[i]
+            del channelList[i]
             await e.channel.delete()
+
+#create Text channel
+async def create_text_channel(member, name, category):
+    channel = await member.guild.create_text_channel(name, category=category)
+    return channel
+
 
 
 async def admin_channels(member, after):
@@ -29,12 +36,12 @@ async def admin_channels(member, after):
         if after.channel.name == "New Talk":
             await public_channel(member)
             
-    
         if after.channel.name == "New private Talk":
-            pass
+            await private_channel(member)
 
     #delete voice channels
     await delete_voice_channel(publicVoiceChannels)
+    await delete_voice_channel(privateVoiceChannels)
 
 
 
@@ -82,7 +89,7 @@ async def voice_channel_commands(message, member):
     if message.content.startswith(".info"):
         await voice_channel_info(message)
 
-    if editable_Channel(member) is not None:       #user is in channel, allowance to edit
+    if editable_Channel(member):       #user is in channel, allowance to edit
         channel = editable_Channel(member)
 
         command = message.content.lower().replace(" ", "")
