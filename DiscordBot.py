@@ -1,4 +1,3 @@
-from discord.flags import MemberCacheFlags
 from methods import get_member_by_user
 from channelAdministration import admin_channels, control_voice_channel, update_text_channel_permisions
 import discord
@@ -36,8 +35,6 @@ class MyClient(discord.Client):
 
         #admin channels
         await admin_channels(member, before, after)
-
-
 
 
 
