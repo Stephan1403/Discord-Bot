@@ -4,3 +4,4 @@ class voiceChannel:
         self.member = member
         self.channel = channel
         self.textChannel = textChannel
+        self.category = channel.category
