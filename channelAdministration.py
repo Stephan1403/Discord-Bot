@@ -2,6 +2,7 @@ from discord import Embed, Colour
 import random
 
 from discord.channel import TextChannel
+from discord.webhook import RequestsWebhookAdapter
 
 
 from voiceChannel import voiceChannel
@@ -24,7 +25,8 @@ async def delete_voice_channel(channelList):
         if not e.channel.members:  # voice channel is empty
             del channelList[i]
             await e.channel.delete()
-            await e.textChannel.delete()
+            if e.textChannel:
+                await e.textChannel.delete()
 
 # create Text channel
 
@@ -62,7 +64,7 @@ async def public_channel(member):
     channel = await create_voice_channel(member, name, category)
     await member.move_to(channel)
 
-    publicVoiceChannels.append(voiceChannel(name, member, channel))
+    publicVoiceChannels.append(voiceChannel(name, member, channel, None))
 
 
 # private voice channel
@@ -95,8 +97,7 @@ async def control_voice_channel(message, member):
     # TODO: somehow later iterate through all lists
     if get_vChannel_by_tChannel(message.channel, privateVoiceChannels):
 
-        voice_channel = get_vChannel_by_tChannel(
-            message.channel, privateVoiceChannels)
+        voice_channel = get_vChannel_by_tChannel(message.channel, privateVoiceChannels)
         command = message.content.lower().replace(" ", "")
 
         if command.startswith("."):
@@ -105,6 +106,10 @@ async def control_voice_channel(message, member):
                 await edit_name(message, voice_channel)
             if command.startswith(".userlimit="):
                 await edit_user_limit(message, voice_channel)
+            if command.startswith(".close"):
+                await close(member, voice_channel)
+            if command.startswith(".open"):
+                await open(member, voice_channel)
 
 
 # 1 info - Embed
@@ -133,6 +138,10 @@ async def voice_channel_info(message):
 async def edit_name(message, channel):
 
     name = message.content.split("=")[1]
+    
+    if len(name)<1:
+        await message.channel.send("Your name can´t be empty")
+        return
 
     for i in privateVoiceChannels:
         if i.name == name:
@@ -163,15 +172,31 @@ async def edit_user_limit(message, channel):
         await message.channel.send("Please enter a valid number")
 
 
+# 4 close
+async def close(member, channel):
+    await channel.set_permissions(member.guild.default_role, view_channel=False)
+    # for i in channel.members:
+    #     await channel.set_permissions(i, view_channel=True)
+
+# 5 open
+async def open(member, channel):
+    await channel.set_permissions(member.guild.default_role, view_channel=True)
+
+
+# 6 user list
+
+
+
+
+
 # ------Edit text_channel commands------
 
 async def update_text_channel_permisions(member, before, after):
 
     #for before channel
-    if get_tChannel_by_vChannel(before.channel, privateVoiceChannels):  #channel is privateVoiceChannel
+    if get_tChannel_by_vChannel(before.channel, privateVoiceChannels):
+        
         t_channel = get_tChannel_by_vChannel(before.channel, privateVoiceChannels)
-
-        #TODO: delete permission for user
         await t_channel.set_permissions(member, view_channel=False)
 
     #for after channel
