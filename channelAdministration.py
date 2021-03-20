@@ -9,7 +9,7 @@ from voiceChannel import voiceChannel
 from methods import get_category_by_name, get_tChannel_by_vChannel, get_vChannel_by_tChannel, isInt
 
 publicVoiceChannels = []
-privateVoiceChannels = []
+voiceChannels = []
 
 
 # create Voice Channel
@@ -49,7 +49,7 @@ async def admin_channels(member, before, after):
 
     # delete voice channels
     await delete_voice_channel(publicVoiceChannels)
-    await delete_voice_channel(privateVoiceChannels)
+    await delete_voice_channel(voiceChannels)
 
     # update text channel permission
     await update_text_channel_permisions(member, before, after)
@@ -87,7 +87,7 @@ async def private_channel(member):
     await t_channel.set_permissions(member, view_channel = True)
 
 
-    privateVoiceChannels.append(voiceChannel(name, member, channel, t_channel))
+    voiceChannels.append(voiceChannel(name, member, channel, t_channel))
 
 
 # ------Edit voice_channel commands------
@@ -95,9 +95,9 @@ async def private_channel(member):
 # change visibility for textchannel
 async def control_voice_channel(message, member):
     # TODO: somehow later iterate through all lists
-    if get_vChannel_by_tChannel(message.channel, privateVoiceChannels):
+    if get_vChannel_by_tChannel(message.channel, voiceChannels):
 
-        voice_channel = get_vChannel_by_tChannel(message.channel, privateVoiceChannels)
+        voice_channel = get_vChannel_by_tChannel(message.channel, voiceChannels)
         command = message.content.lower().replace(" ", "")
 
         if command.startswith("."):
@@ -143,13 +143,13 @@ async def edit_name(message, channel):
         await message.channel.send("Your name can´t be empty")
         return
 
-    for i in privateVoiceChannels:
+    for i in voiceChannels:
         if i.name == name:
             await message.channel.send("Name is already used, please pick another one")
             break
     else:
         # break wasn´t called -> no channel with same name
-        for a in privateVoiceChannels:
+        for a in voiceChannels:
             if a.channel == channel:
                 a.name = name
                 await channel.edit(name=name)
@@ -194,14 +194,15 @@ async def open(member, channel):
 async def update_text_channel_permisions(member, before, after):
 
     #for before channel
-    if get_tChannel_by_vChannel(before.channel, privateVoiceChannels):
+    if get_tChannel_by_vChannel(before.channel, voiceChannels):
         
-        t_channel = get_tChannel_by_vChannel(before.channel, privateVoiceChannels)
+        t_channel = get_tChannel_by_vChannel(before.channel, voiceChannels)
         await t_channel.set_permissions(member, view_channel=False)
 
     #for after channel
-    if get_tChannel_by_vChannel(after.channel, privateVoiceChannels):
+    if get_tChannel_by_vChannel(after.channel, voiceChannels):
 
-        t_channel = get_tChannel_by_vChannel(after.channel, privateVoiceChannels)
+        t_channel = get_tChannel_by_vChannel(after.channel, voiceChannels)
         await t_channel.set_permissions(member, view_channel=True)
+
 
