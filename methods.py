@@ -16,6 +16,14 @@ def get_member_by_user(guild, user):
             break
     return member
 
+#channel in channelList
+def in_channelList(channel, channelList):
+    for i in channelList:
+        if i.channel == channel:
+            return True
+    return False
+    
+
 #voice channel by text channel
 def get_vChannel_by_tChannel(tChannel, listA):
     
@@ -31,8 +39,6 @@ def get_tChannel_by_vChannel(vChannel, listA):
         if e.channel == vChannel:
             if listA[i].textChannel:
                 return listA[i].textChannel
-
-
 
 
 #test varibales
