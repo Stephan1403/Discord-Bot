@@ -1,15 +1,12 @@
 from discord import Embed, Colour
 import random
 
-from discord.channel import TextChannel
-from discord.webhook import RequestsWebhookAdapter
-
-
 from voiceChannel import voiceChannel
-from methods import get_category_by_name, get_tChannel_by_vChannel, get_vChannel_by_tChannel, isInt
+from methods import get_category_by_name, get_member_by_user, get_tChannel_by_name, in_channelList, get_tChannel_by_vChannel, get_vChannel_by_tChannel, isInt
 
 publicVoiceChannels = []
 voiceChannels = []
+forbiddenNames = ["New private Talk", "New Talk", "Gaming"]
 
 
 # create Voice Channel
@@ -46,6 +43,9 @@ async def admin_channels(member, before, after):
 
         if after.channel.name == "New private Talk":
             await private_channel(member)
+
+        if after.channel.name == "Gaming":
+            await gaming_channel(member)
 
     # delete voice channels
     await delete_voice_channel(publicVoiceChannels)
@@ -103,7 +103,7 @@ async def control_voice_channel(message, member):
         if command.startswith("."):
 
             if command.startswith(".name="):
-                await edit_name(message, voice_channel)
+                await edit_name(message.content, voice_channel, message.channel)
             if command.startswith(".userlimit="):
                 await edit_user_limit(message, voice_channel)
             if command.startswith(".close"):
@@ -135,17 +135,24 @@ async def voice_channel_info(message):
 
 
 # 2 name
-async def edit_name(message, channel):
+async def edit_name(message, channel, tChannel = None):
 
-    name = message.content.split("=")[1]
+    name = message.split("=")[1]
+    
+    if tChannel is None:
+        tChannel = get_tChannel_by_name(channel.guild, "errors")
     
     if len(name)<1:
-        await message.channel.send("Your name can´t be empty")
+        await tChannel.send("Your name can´t be empty")
         return
+
+    if name.replace(" ", "") in forbiddenNames:
+        await tChannel.send("Please choose another name")
+        return   
 
     for i in voiceChannels:
         if i.name == name:
-            await message.channel.send("Name is already used, please pick another one")
+            await tChannel.send("Name is already used, please pick another one")
             break
     else:
         # break wasn´t called -> no channel with same name
@@ -153,7 +160,7 @@ async def edit_name(message, channel):
             if a.channel == channel:
                 a.name = name
                 await channel.edit(name=name)
-                await message.channel.edit(name=f"{name} Administration")
+                await tChannel.edit(name=f"{name} Administration")
 
 
 # 3 userlimit
@@ -204,5 +211,49 @@ async def update_text_channel_permisions(member, before, after):
 
         t_channel = get_tChannel_by_vChannel(after.channel, voiceChannels)
         await t_channel.set_permissions(member, view_channel=True)
+
+
+
+
+
+#__________________Gaming__________________#
+
+# private voice channel
+async def gaming_channel(member):
+
+    game = f"Gaming {random.randint(0, 100)}"
+
+    #current game
+    if member.activities:
+        game = member.activities[0].name
+
+
+    category = get_category_by_name(member.guild, "Gaming")
+
+    # voice channel
+    channel = await create_voice_channel(member, game, category)
+    await member.move_to(channel)
+
+
+    voiceChannels.append(voiceChannel(game, member, channel))
+
+
+async def update_game_activity(guild, before, after):  #TODO: test if activity is a game
+    if not after.voice:
+        return
+
+
+    if after.voice.channel is not None:
+        if after.activity:
+            game = after.activity.name
+
+            if before.channel:
+                if in_channelList(before.voice.channel, voiceChannels):
+                    await edit_name(f"name={game}", before.voice.channel)
+
+
+
+
+
 
 
