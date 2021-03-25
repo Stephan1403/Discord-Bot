@@ -7,6 +7,14 @@ def get_category_by_name(guild, categoryName):
             break
     return category
 
+def get_tChannel_by_name(guild, channelName):
+    channel = None
+    for c in guild.channels:
+        if c.name == channelName:
+            channel = c 
+            break
+    return channel
+
 #member by user
 def get_member_by_user(guild, user):
     member = None
