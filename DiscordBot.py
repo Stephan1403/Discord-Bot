@@ -1,5 +1,5 @@
 from methods import get_member_by_user
-from channelAdministration import admin_channels, control_voice_channel, update_text_channel_permisions
+from channelAdministration import admin_channels, control_voice_channel, update_game_activity
 import discord
 
 
@@ -35,6 +35,10 @@ class MyClient(discord.Client):
 
         #admin channels
         await admin_channels(member, before, after)
+
+    #member update
+    async def on_member_update(self, before, after):
+        await update_game_activity(client.guilds[0], before, after)
 
 
 
