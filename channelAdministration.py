@@ -247,7 +247,7 @@ async def update_game_activity(guild, before, after):  #TODO: test if activity i
         if after.activity:
             game = after.activity.name
 
-            if before.channel:
+            if before.voice.channel:
                 if in_channelList(before.voice.channel, voiceChannels):
                     await edit_name(f"name={game}", before.voice.channel)
 
