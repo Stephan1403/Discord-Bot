@@ -1,3 +1,4 @@
+from Music.MusicBot import music_bot_control
 from methods import get_member_by_user
 from channelAdministration import admin_channels, control_voice_channel, update_game_activity
 import discord
@@ -28,6 +29,9 @@ class MyClient(discord.Client):
 
         #call control voice channel
         await control_voice_channel(message, member)
+
+        #music bot
+        await music_bot_control(message, member, client)
         
 
     #on voice update
