@@ -10,7 +10,7 @@ async def music_bot_control(message, member, client):
         if member.voice:
             if member.voice.channel: 
                 await join_channel(member.voice.channel)
-                await play_music(client.voice_clients[0])
+                await play_music(client.voice_clients[0], 'https://www.youtube.com/watch?v=AQ7-qKQMce4')
 
 
 async def join_channel(channel):
@@ -19,8 +19,7 @@ async def join_channel(channel):
 
     
 
-async def play_music(voice_client):
-    link = 'https://www.youtube.com/watch?v=SKpYiIn_icU'
+async def play_music(voice_client, link):
 
     YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
     FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
@@ -33,5 +32,6 @@ async def play_music(voice_client):
             voice_client.is_playing()
     else:
         print("is already playing")
+        #add to queue 
         return
 
