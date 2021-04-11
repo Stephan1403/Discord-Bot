@@ -3,14 +3,20 @@ from youtube_dl import YoutubeDL
 
 
 async def music_bot_control(message, member, client):
+    bot_connection = member.guild.voice_client
 
     command = message.content
     
     if command.startswith("-play"):
         if member.voice:
             if member.voice.channel: 
-                await join_channel(member.voice.channel)
-                await play_music(client.voice_clients[0], 'https://www.youtube.com/watch?v=AQ7-qKQMce4')
+                if bot_connection:
+                    if bot_connection.channel != member.voice.channel:
+                        await bot_connection.move_to(member.voice.channel)
+                elif not bot_connection:
+                    await join_channel(member.voice.channel)
+
+                await play_music(client.voice_clients[0], 'https://www.youtube.com/watch?v=vGrfFzagzHs')
 
 
 async def join_channel(channel):
@@ -27,9 +33,9 @@ async def play_music(voice_client, link):
     if not voice_client.is_playing():
         with YoutubeDL(YDL_OPTIONS) as ydl:
             info = ydl.extract_info(link, download = False)	
-            URL = info['formats'][0]['url']
-            voice_client.play(FFmpegPCMAudio(executable='C:/Program Files/FFMPEG/ffmpeg.exe',source=URL, **FFMPEG_OPTIONS))
-            voice_client.is_playing()
+            # URL = info['formats'][0]['url']
+            # voice_client.play(FFmpegPCMAudio(executable='C:/Program Files/FFMPEG/ffmpeg.exe',source=URL, **FFMPEG_OPTIONS))
+            # voice_client.is_playing()
     else:
         print("is already playing")
         #add to queue 
