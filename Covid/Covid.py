@@ -67,7 +67,7 @@ coronaInfo = Embed(title="Corona numbers Ostallgäu", colour=Colour(0x7ed321), u
 #coronaInfo.set_image(url="https://cdn.discordapp.com/embed/avatars/0.png")
 #coronaInfo.set_thumbnail(url="https://www.links-bewegt.de/kontext/controllers/image.php/o/220")
 
-coronaInfo.set_footer(text=curDate.text)
+coronaInfo.set_footer(text=curDate.text.replace("Aktualisiert am", "Updated at"))
 
 coronaInfo.add_field(name="Population", value=str(info['population']))
 coronaInfo.add_field(name="Infections", value=str(info['infections']))
