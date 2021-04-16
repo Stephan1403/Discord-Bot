@@ -12,7 +12,6 @@ intents = discord.Intents.default()
 intents.members = True
 
 bot = commands.Bot(command_prefix='!')          #General Bot commands
-musicBot = commands.Bot(command_prefix='-')     #Music Bot Commands
 channelBot = command.Bot(command_prefix='.')    #channel Bot Commands
 
 
