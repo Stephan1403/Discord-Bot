@@ -1,15 +1,22 @@
+from discord import channel
+from discord.ext.commands.core import command
+from discord.message import implement_partial_methods
 from methods import get_member_by_user
 from channelAdministration import admin_channels, control_voice_channel, update_game_activity
 from Covid.Covid import coronaInfoEmbed
 import discord
+from discord.ext import commands
 
 
 intents = discord.Intents.default()
 intents.members = True
 
+bot = commands.Bot(command_prefix='!')          #General Bot commands
+musicBot = commands.Bot(command_prefix='-')     #Music Bot Commands
+channelBot = command.Bot(command_prefix='.')    #channel Bot Commands
+
 
 class MyClient(discord.Client):
-
 
     def __init__(self):
         super().__init__(
@@ -20,6 +27,16 @@ class MyClient(discord.Client):
     #on log in
     async def on_ready(self):
         print("looged in")
+
+
+    @bot.command
+
+
+
+
+
+
+
 
     #on message
     async def on_message(self, message):
