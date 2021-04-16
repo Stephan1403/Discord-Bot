@@ -13,6 +13,9 @@ async def on_ready():
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
+        try:
+            client.load_extension(f'cogs.{filename[:-3]}')
+        except Exception as e:
+            print(f"Failed at {filename}\nError: {str(e)}")
 
 client.run('ODAyMjcwMDMwMzM5MjQ0MDMz.YAsyMA.H74vF2_HVsOsW1wiB9gJYGCCGxM')
