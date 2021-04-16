@@ -11,8 +11,6 @@ async def on_ready():
 
 #-----------------cogs----------------------
 
-
-            
 for root, dirs, files in os.walk('./cogs'):
     for name in files:
         if name.endswith('.py'):
@@ -23,8 +21,6 @@ for root, dirs, files in os.walk('./cogs'):
             
             except Exception as e:
                 print(f"Failed at {name}\nError: {str(e)}")
-
-
 
 
 client.run('ODAyMjcwMDMwMzM5MjQ0MDMz.YAsyMA.H74vF2_HVsOsW1wiB9gJYGCCGxM')
