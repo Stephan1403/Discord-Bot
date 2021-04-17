@@ -8,7 +8,8 @@ client = commands.Bot(command_prefix=".")
 async def on_ready():
     print("logged in")
     guilds = discord.utils.get(client.guilds)[0]
-    channel = discord.utils.get(guilds.voice_channels)
+    channel = discord.utils.get(guilds.channel, id='833042543117729792')
+    print(channel.name)
 
 
 
