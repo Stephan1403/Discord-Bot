@@ -11,6 +11,8 @@ async def on_ready():
 
 #-----------------cogs----------------------
 
+client.remove_command("help")
+
 for root, dirs, files in os.walk('./cogs'):
     for name in files:
         if name.endswith('.py'):
