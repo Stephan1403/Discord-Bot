@@ -18,6 +18,12 @@ class music_bot(commands.Cog):
         pass
 
     @commands.command()
+    async def join(self, ctx):
+        #TODO: check if user is in voice channel, if bot is already connected, ...
+        pass
+        
+
+    @commands.command()
     async def play(self, ctx, arg):
         pass
 
