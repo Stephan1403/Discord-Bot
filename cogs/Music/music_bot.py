@@ -1,8 +1,7 @@
-import discord
 from discord.ext import commands
 
 #Music Bot imports
-from os import link
+from discord import FFmpegPCMAudio
 from youtube_search_requests import YoutubeSearch
 from youtube_dl import YoutubeDL
 
@@ -17,15 +16,14 @@ class music_bot(commands.Cog):
     async def on_ready(self):
         pass
 
-    @commands.command()
-    async def join(self, ctx):
-        #TODO: check if user is in voice channel, if bot is already connected, ...
-        pass
-        
 
     @commands.command()
-    async def play(self, ctx, arg):
-        pass
+    async def play(self, ctx, arg): #TODO: take 
+        print(get_link(arg, url=True))
+
+        voice = await join_channel(ctx.author.voice.channel)
+
+        await play_music(voice, arg)
 
 
 
@@ -35,9 +33,20 @@ def setup(client):
 
 
 #Music Bot methods
-async def join_channel(channel):
-    pass
+async def play_music(voice, name):
+    FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+    URL = get_link(name, url=True)
+    await voice.play(FFmpegPCMAudio(source=URL, **FFMPEG_OPTIONS))
+    print
 
+
+
+
+
+async def join_channel(channel):
+    #TODO: check if user is in voice channel, if bot is already connected, ...
+    return await channel.connect()
+    
 
 
 def Link_with_name(name):
@@ -53,8 +62,7 @@ def get_link(name, url=True):
     else: 
         link = name         #ToDo Check validation
 
-    link = 'https://www.youtube.com/watch?v=9iHM6X6uUH8'
     dl_opts = {'format': 'bestaudio'}       #best possible audio
     with YoutubeDL(dl_opts) as ydl:
         info = ydl.extract_info(link, download=False)   #dictonary with all infos
-        return info['formats'][0]['url']                 #url to audio file of video
+        return info['formats'][0]['url']             #url to audio file of video
