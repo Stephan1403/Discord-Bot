@@ -1,4 +1,5 @@
 import os
+import discord
 from discord.ext import commands
 
 client = commands.Bot(command_prefix=".")
@@ -6,6 +7,8 @@ client = commands.Bot(command_prefix=".")
 @client.event
 async def on_ready():
     print("logged in")
+    guilds = discord.utils.get(client.guilds)[0]
+    channel = discord.utils.get(guilds.voice_channels)
 
 
 

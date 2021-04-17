@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 #Music Bot imports
-from discord import FFmpegPCMAudio
+from discord import FFmpegPCMAudio, client
 from youtube_search_requests import YoutubeSearch
 from youtube_dl import YoutubeDL
 
@@ -14,7 +14,7 @@ class music_bot(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        pass
+        print(client.Guild)
 
 
     @commands.command()
@@ -36,8 +36,7 @@ def setup(client):
 async def play_music(voice, name):
     FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
     URL = get_link(name, url=True)
-    await voice.play(FFmpegPCMAudio(source=URL, **FFMPEG_OPTIONS))
-    print
+    await voice.play(FFmpegPCMAudio(executable='C:/Program Files/FFMPEG/ffmpeg.exe', source=URL, **FFMPEG_OPTIONS))
 
 
 
