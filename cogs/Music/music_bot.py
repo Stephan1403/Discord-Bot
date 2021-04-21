@@ -34,6 +34,11 @@ def setup(client):
 
 #Music Bot methods
 async def play_music(voice, name):
+
+
+
+
+
     FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
     URL = get_link(name, url=True)
     await voice.play(FFmpegPCMAudio(executable='C:/Program Files/FFMPEG/ffmpeg.exe', source=URL, **FFMPEG_OPTIONS))
@@ -50,8 +55,9 @@ async def join_channel(channel):
 
 def Link_with_name(name):
     y = YoutubeSearch()
-    return y.search_videos(name, max_results=1)[0]['url']
-
+    
+    vid = y.search_videos(name, max_results=1)[0]['url']
+    print(vid)
 
 def get_link(name, url=True):
     
@@ -65,3 +71,5 @@ def get_link(name, url=True):
     with YoutubeDL(dl_opts) as ydl:
         info = ydl.extract_info(link, download=False)   #dictonary with all infos
         return info['formats'][0]['url']             #url to audio file of video
+
+Link_with_name("hallo")
