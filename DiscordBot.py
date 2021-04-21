@@ -7,9 +7,9 @@ client = commands.Bot(command_prefix=".")
 @client.event
 async def on_ready():
     print("logged in")
-    guilds = discord.utils.get(client.guilds)[0]
-    channel = discord.utils.get(guilds.channel, id='833042543117729792')
-    print(channel.name)
+    guild = client.guilds[0]
+    channel = discord.utils.get(guild.voice_channels, name='developer')
+    await channel.connect()
 
 
 
