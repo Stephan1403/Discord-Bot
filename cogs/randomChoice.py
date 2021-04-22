@@ -19,14 +19,20 @@ class randomChoice(commands.Cog):
 
     
     @commands.command()
-    async def random(self, ctx, *args):
-        
-        if ctx.author.voice.channel:
+    async def random(self, ctx, *args):  #Problem: not updating the voice state
+        if ctx.author.voice:
+            print(ctx.author.voice.channel.name)
+        else:
+            print("not in channel apparently")
+
+        if ctx.author.voice:
             if args:
                 
                 matches =  assignArguments(ctx, args, "none")
 
-                
+                for i in matches:
+                    await ctx.channel.send(str(i[0]) + ":   " + str(i[1]))
+
                 
             else:
                 await ctx.channel.send("Please pass a argument")
@@ -38,11 +44,13 @@ class randomChoice(commands.Cog):
 
     @commands.command()
     async def randomNick(self, ctx, *args):
-        if ctx.author.voice.channel:
+        if ctx.author.voice:
             if args:
 
                 matches = assignArguments(ctx, args, "")
-
+                for i in matches:
+                    pass
+                    
 
             else:
                 await ctx.channel.send("Please pass a argument")
