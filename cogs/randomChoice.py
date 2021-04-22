@@ -2,6 +2,8 @@
 #channes has to contain at least 2 users 
 #somehow not only return numbers but also given values 
 #TODO: only for certain people
+#TODO: amout of arguments for each user
+#TODO: active or deactivate to change the users name - other command
 
 import random
 from discord.ext import commands
@@ -15,23 +17,62 @@ class randomChoice(commands.Cog):
     async def on_ready(self):
         pass
 
+    
     @commands.command()
-    async def random(self, ctx, *number):
+    async def random(self, ctx, *args):
+        
         if ctx.author.voice.channel:
-            channel = ctx.author.voice.channel
-            if len(channel.members) > 1:    #returning empty list try fixing with intents
-                print(number)
+            if args:
+                
+                matches =  assignArguments(ctx, args, "none")
+
+                
+                
             else:
-                print(channel.members)
-                await ctx.channel.send("This command needs at least two users in your voice channel")
+                await ctx.channel.send("Please pass a argument")
 
         else:
-            await ctx.channel.send("You have to be in a channel to use this command")
+            await ctx.channel.send("You have to be in a voice channel to use this command")
+
+
+
+    @commands.command()
+    async def randomNick(self, ctx, *args):
+        if ctx.author.voice.channel:
+            if args:
+
+                matches = assignArguments(ctx, args, "")
+
+
+            else:
+                await ctx.channel.send("Please pass a argument")
+        else:
+            await ctx.channel.send("You have to be in a voice channel to use this command")
         
 
 
 
 def setup(client):
     client.add_cog(randomChoice(client))
+
+
+def assignArguments(ctx, args, default):
+    #takes arg puts it into arguments appends it to matches list
+    arguments = []
+    matches = []
+    members = ctx.author.voice.channel.members
+
+    for i in args:
+        arguments.append(i)
+
+    random.shuffle(arguments)   #args in random order
+
+    for i, mem in enumerate(members):
+        if i >= len(arguments):     #no more arguments to asign for a user
+            matches.append([ mem.name, default, mem ])   #asign a default 
+        else:
+            matches.append([ mem.name, arguments[i], mem ]) #member name, a random argument, the member as object
+        
+    return matches
 
 
