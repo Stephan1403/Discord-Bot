@@ -29,4 +29,4 @@ for root, dirs, files in os.walk('./cogs'):
                 print(f"Failed at {name}\nError: {str(e)}")
 
 
-client.run('ODAyMjcwMDMwMzM5MjQ0MDMz.YAsyMA.H74vF2_HVsOsW1wiB9gJYGCCGxM')
+client.run()
